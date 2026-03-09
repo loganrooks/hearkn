@@ -1,0 +1,32 @@
+{
+  "name": "claude-notify",
+  "version": "0.1.0",
+  "description": "Push notifications for Claude Code — know when your agent needs you",
+  "bin": {
+    "claude-notify": "bin/cli.js"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "notifications",
+    "ntfy",
+    "hooks",
+    "ai",
+    "agent"
+  ],
+  "author": "Logan Rooks",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rookslog/claude-notify"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "LICENSE",
+    "README.md"
+  ]
+}
