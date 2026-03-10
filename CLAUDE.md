@@ -9,6 +9,7 @@ Push notifications for Claude Code via ntfy.sh with click-to-focus VS Code windo
 | `bin/cli.js` | CLI entry point — `npx claude-notify [test\|status\|uninstall]` |
 | `lib/hook.js` | The hook — reads stdin JSON, sends ntfy, focuses VS Code window |
 | `lib/install.js` | Interactive installer — prompts, patches settings.json, sends test |
+| `test/*.test.js` | TDD suite — unit (62), integration (9), E2E (9) |
 | `package.json` | npm package config |
 
 ## Conventions
@@ -44,10 +45,31 @@ Never write anything else to stdout. Never throw uncaught exceptions.
 }
 ```
 
+## Version Control
+
+- **Trunk-based** on `main` — no feature branches for this project size
+- **Conventional commits**: `feat:`, `fix:`, `docs:`, `chore:`, `test:`
+- **`wip:` prefix** for pause-work commits (mid-task handoff)
+- **Semver tags** (`v0.1.0`) for npm publish points
+- **CI**: GitHub Actions runs unit tests on push (Node 18/20/22, Ubuntu + macOS)
+- All tests must pass before committing to main
+
 ## Testing
 
 ```bash
-# Simulate a Stop event
+# Unit tests (62 tests, fast, no network)
+npm test
+
+# Integration tests (9 tests, hits ntfy.sh — can be flaky due to rate limits)
+npm run test:integration
+
+# E2E tests (9 tests, full stdin pipeline)
+npm run test:e2e
+
+# All tests
+npm run test:all
+
+# Simulate a Stop event manually
 echo '{"session_id":"test","cwd":"/home/user","hook_event_name":"Stop","last_assistant_message":"Hello world."}' | node lib/hook.js
 
 # CLI commands

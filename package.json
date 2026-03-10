@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rookslog/claude-notify"
+    "url": "https://github.com/loganrooks/claude-notify"
   },
   "scripts": {
     "test": "node --test test/claude-notify.unit.test.js",
