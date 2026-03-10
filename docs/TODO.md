@@ -3,12 +3,19 @@
 ## Must-have
 
 - [ ] README.md with install instructions, usage, config reference
-- [ ] Handle stale VSCODE_IPC_HOOK_CLI sockets (check if socket file exists before `code -r .`)
 - [ ] Installer: detect if Claude Code / `~/.claude/settings.json` exists
 - [ ] Installer: validate ntfy topic is reachable before finishing
 - [ ] Test `npx claude-notify` install flow end-to-end on a clean machine
 - [ ] Uninstaller: verify it cleanly removes hooks without breaking other hooks
 - [ ] GitHub repo creation + first push
+
+## Design decisions needed
+
+- [ ] Different notification types per event (permission vs idle vs stop)
+- [ ] Actionable notifications (respond from phone for AskUserQuestion)
+- [ ] Importance levels / categories
+- [ ] Multi-session handling from different VS Code windows
+- [ ] Whether to make the repo public
 
 ## Nice-to-have
 
@@ -20,3 +27,10 @@
 - [ ] `npx claude-notify update` — update hook without re-running full installer
 - [ ] GitHub Actions CI
 - [ ] `install.sh` curl-based alternative installer for non-npm users
+
+## Done
+
+- [x] Handle stale VSCODE_IPC_HOOK_CLI sockets (catch error silently)
+- [x] Remove workspace_root from config/code (use cwd directly)
+- [x] Switch ntfy from HTTP headers to JSON body mode (fixes unicode)
+- [x] TDD test suite (62 unit, 9 integration, 9 E2E)

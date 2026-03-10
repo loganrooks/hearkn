@@ -40,8 +40,7 @@ Never write anything else to stdout. Never throw uncaught exceptions.
   "ntfy_server": "https://ntfy.sh",        // Or self-hosted
   "hostname": "myhost",                    // SSH hostname for vscode:// URLs
   "click_scheme": "vscode",               // vscode | vscode-insiders | cursor | none
-  "click_mode": "workspace",              // workspace | app | none
-  "workspace_root": "/home/user"           // VS Code workspace root folder
+  "click_mode": "workspace"               // workspace | app | none
 }
 ```
 

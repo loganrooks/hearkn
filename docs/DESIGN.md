@@ -30,7 +30,7 @@ User runs Claude Code in VS Code terminal (Remote SSH)
 - `hook_event_name`: "Stop" or "Notification"
 - `notification_type`: only on Notification events — "idle_prompt", "permission_prompt", "elicitation_dialog"
 - `last_assistant_message`: only on Stop events — full markdown text of last response
-- `cwd`: Claude Code process working directory (can drift — don't rely on it for workspace root)
+- `cwd`: Claude Code process working directory (used for project name and click URL)
 
 ## Why ntfy.sh (not OSC escape sequences)
 
@@ -54,12 +54,13 @@ Caveat: tmux sessions inherit env vars from when they were created. If created f
 VS Code terminal, `VSCODE_IPC_HOOK_CLI` persists even if the VS Code window closes.
 The socket file may go stale. The hook catches the error silently.
 
-## Why workspace_root in config (not cwd detection)
+## Why cwd (not a static workspace_root config)
 
-Claude Code's `cwd` drifts (GSD framework, subprocesses change it). The VS Code
-extensionHost process cwd also drifts. The workspace root is managed by the VS Code
-client (Mac/Windows side), invisible to the server. Storing it in config during install
-is the only reliable approach.
+Earlier versions stored `workspace_root` in config and used it for project name and
+click URLs. This broke with multiple VS Code windows — each window has a different
+workspace, but the config only held one value. Now the per-session `cwd` from the
+hook payload is used directly. `cwd` reliably reflects where Claude Code is running
+and correctly handles multi-window setups.
 
 ## Why pure JS (no shell script)
 
@@ -77,7 +78,7 @@ in Node.js and to support nested config in the future.
 The `summarize()` function strips markdown formatting from Claude's last response:
 - Code blocks, inline code, bold, links, headings, list markers
 - Box-drawing characters and decorative lines (★ ─── etc.)
-- Truncates at 200 chars on a word boundary
+- Truncates at 300 chars on a word boundary
 
 ## Debounce Strategy
 
@@ -92,8 +93,16 @@ Per-session debounce using temp files (`/tmp/claude-notify-<session_id>.json`).
 | `app` | `vscode://` | Multiple windows (just brings VS Code to front) |
 | `none` | (omitted) | Phone-only, no click action |
 
-The Click URL is sent as the `Click` header in the ntfy request. On macOS, tapping the
+The Click URL is sent as the `click` field in the ntfy JSON body. On macOS, tapping the
 notification opens the URL. On iOS, `vscode://` does nothing (no VS Code) — harmless.
+
+## Why JSON body mode (not HTTP headers)
+
+ntfy supports both HTTP-header and JSON-body modes for publishing. The initial
+implementation used HTTP headers (`Title:`, `Click:`, etc.), but this caused unicode
+corruption in notification titles — HTTP headers don't reliably transport non-ASCII
+characters. Switched to JSON body mode with `Content-Type: application/json` which
+handles unicode cleanly.
 
 ## References
 

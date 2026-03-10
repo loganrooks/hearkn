@@ -5,6 +5,7 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
 
 const command = process.argv[2] || '';
 
@@ -20,25 +21,34 @@ async function test() {
     process.exit(1);
   }
 
+  const host = config.hostname || os.hostname();
   const clickUrl = config.click_scheme !== 'none'
-    ? `${config.click_scheme || 'vscode'}://vscode-remote/ssh-remote+${config.hostname || os.hostname()}${process.cwd()}`
+    ? `${config.click_scheme || 'vscode'}://vscode-remote/ssh-remote+${host}${process.cwd()}`
     : '';
 
-  const headers = {
-    'Title': 'Claude Code · test',
-    'Priority': '3',
-    'Tags': 'robot',
+  const payload = {
+    topic: config.ntfy_topic,
+    title: `test [SSH: ${host}]`,
+    message: 'Test notification from claude-notify',
+    priority: 3,
+    tags: ['robot'],
   };
-  if (clickUrl) headers['Click'] = clickUrl;
+  if (clickUrl) payload.click = clickUrl;
 
-  const url = `${config.ntfy_server || 'https://ntfy.sh'}/${config.ntfy_topic}`;
-  const parsed = new URL(url);
+  const body = JSON.stringify(payload);
+  const serverUrl = config.ntfy_server || 'https://ntfy.sh';
+  const parsed = new URL(serverUrl);
+  const transport = parsed.protocol === 'https:' ? https : http;
 
-  const req = https.request({
+  const req = transport.request({
     hostname: parsed.hostname,
+    port: parsed.port,
     path: parsed.pathname,
     method: 'POST',
-    headers,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Length': Buffer.byteLength(body),
+    },
     timeout: 5000,
   }, (res) => {
     if (res.statusCode === 200) {
@@ -49,7 +59,7 @@ async function test() {
   });
 
   req.on('error', (e) => console.log(`\n  ⚠ Failed: ${e.message}\n`));
-  req.write('Test notification from claude-notify');
+  req.write(body);
   req.end();
 }
 
