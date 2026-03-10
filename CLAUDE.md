@@ -1,12 +1,12 @@
-# claude-notify
+# harkn
 
-Push notifications for Claude Code via ntfy.sh with click-to-focus VS Code window support.
+Push notifications for AI coding agents via ntfy.sh with click-to-focus VS Code window support.
 
 ## Project Structure
 
 | File | Purpose |
 |------|---------|
-| `bin/cli.js` | CLI entry point — `npx claude-notify [test\|status\|uninstall]` |
+| `bin/cli.js` | CLI entry point — `npx harkn [test\|status\|uninstall]` |
 | `lib/hook.js` | The hook — reads stdin JSON, sends ntfy, focuses VS Code window |
 | `lib/install.js` | Interactive installer — prompts, patches settings.json, sends test |
 | `test/*.test.js` | TDD suite — unit (62), integration (9), E2E (9) |
@@ -15,7 +15,7 @@ Push notifications for Claude Code via ntfy.sh with click-to-focus VS Code windo
 ## Conventions
 
 - **Zero dependencies** — only Node.js built-ins (fs, os, path, https, http, readline)
-- **Silent fail** — hooks must never block or crash Claude Code; all errors → `{}` + exit
+- **Silent fail** — hooks must never block or crash the agent; all errors → `{}` + exit
 - **Pure JS** — no shell scripts, no curl; everything in Node.js for cross-platform portability
 - **Config lives at** `~/.claude-notify.conf` (JSON)
 - **Hook installs to** `~/.claude/hooks/claude-notify.js`
@@ -24,7 +24,7 @@ Push notifications for Claude Code via ntfy.sh with click-to-focus VS Code windo
 
 ## Hook Protocol
 
-Claude Code sends JSON on stdin, expects `{}` on stdout. The hook must:
+The agent sends JSON on stdin, expects `{}` on stdout. The hook must:
 1. Read all stdin (JSON payload)
 2. Do its work (send notification, focus window)
 3. Write `{}` to stdout

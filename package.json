@@ -1,13 +1,16 @@
 {
-  "name": "claude-notify",
+  "name": "harkn",
   "version": "0.1.0",
-  "description": "Push notifications for Claude Code — know when your agent needs you",
+  "description": "Push notifications for AI coding agents — know when your agent needs you",
   "bin": {
-    "claude-notify": "bin/cli.js"
+    "harkn": "bin/cli.js"
   },
   "keywords": [
     "claude",
     "claude-code",
+    "codex",
+    "gemini",
+    "opencode",
     "notifications",
     "ntfy",
     "hooks",
@@ -18,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/loganrooks/claude-notify"
+    "url": "https://github.com/loganrooks/harkn"
   },
   "scripts": {
     "test": "node --test test/claude-notify.unit.test.js",

@@ -1,12 +1,12 @@
-# claude-notify
+# harkn
 
-Push notifications for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) via [ntfy.sh](https://ntfy.sh). Know when your agent needs you — from your phone, another monitor, or across the room.
+Push notifications for AI coding agents via [ntfy.sh](https://ntfy.sh). Know when your agent needs you — from your phone, another monitor, or across the room.
 
-Works with VS Code Remote SSH, Cursor, and plain SSH terminals.
+Works with [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Codex, Gemini CLI, OpenCode, and any agent that supports hook systems. Compatible with VS Code Remote SSH, Cursor, and plain SSH terminals.
 
 ## What it does
 
-When Claude Code stops, needs permission, or asks a question, you get a push notification on your phone (or desktop). Tapping the notification focuses the correct VS Code window.
+When your AI coding agent stops, needs permission, or asks a question, you get a push notification on your phone (or desktop). Tapping the notification focuses the correct VS Code window.
 
 | Event | Notification |
 |-------|-------------|
@@ -19,10 +19,10 @@ Notifications show the project folder and SSH hostname (e.g., `my-project [SSH: 
 
 ## Install
 
-**Prerequisites:** Node.js 18+, Claude Code installed.
+**Prerequisites:** Node.js 18+, an AI coding agent with hook support (e.g., Claude Code).
 
 ```bash
-npx claude-notify
+npx harkn
 ```
 
 The interactive installer will:
@@ -36,17 +36,17 @@ Then install the [ntfy app](https://ntfy.sh) on your phone and subscribe to the 
 
 ## Usage
 
-Notifications are automatic after install. No changes to your Claude Code workflow.
+Notifications are automatic after install. No changes to your workflow.
 
 ```bash
 # Send a test notification
-npx claude-notify test
+npx harkn test
 
 # Check installation status
-npx claude-notify status
+npx harkn status
 
 # Remove hooks and config
-npx claude-notify uninstall
+npx harkn uninstall
 ```
 
 ## How it works
@@ -107,8 +107,8 @@ Tapping a notification opens a `vscode://vscode-remote/ssh-remote+host/path` URL
 ## Development
 
 ```bash
-git clone https://github.com/loganrooks/claude-notify.git
-cd claude-notify
+git clone https://github.com/loganrooks/harkn.git
+cd harkn
 
 # Run unit tests (62 tests)
 npm test
